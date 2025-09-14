@@ -1,0 +1,64 @@
+/* boje
+
+tipke,   :#00A878
+narandzasta : #FE5E41
+#1e90ff
+
+*/
+
+.login-image1 {
+  max-width: 80%;
+}
+
+
+.auth-form a,
+.auth-form h2 {
+  color: #0b1c39;
+  text-decoration: none;
+}
+
+input[type="checkbox"] {
+  background-color: #0b1c39;
+  accent-color: #0b1c39;
+}
+
+.form-content {
+  margin-top: 15%;
+}
+
+.btn {
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-login {
+  background-color: #0b1c39;
+  color: #ffffff; /* matches your brownish theme */
+  border-radius: 0;
+}
+
+.btn-login:hover {
+  background-color: #f2f2f2;
+  border-color: #5a2c0a;
+}
+
+.btn-register {
+  background-color: #ffff; /* dark brown */
+  color: #0b1c39;
+  border: 2px solid #0b1c39;
+  border-radius: 0;
+
+}
+
+.btn-register:hover,
+.btn-register-darker:hover {
+  background-color: #0b1c39; /* slightly lighter brown on hover */
+  border-color: #0b1c39;
+  border-radius: 0;
+  color:#ffff;
+}

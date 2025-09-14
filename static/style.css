@@ -1,0 +1,84 @@
+/* General */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Navbar */
+.navbar {
+  background: white;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+}
+.btn-outline {
+  padding: 0.5rem 1rem;
+  border: 1px solid #333;
+  border-radius: 4px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+
+html {
+  height: -webkit-fill-available;
+}
+
+main {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+  height: -webkit-fill-available;
+  max-height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* navbar */
+
+.navbar-brand {
+  font-weight: bold;
+}
+
+.nav-container{
+    text-align: right;
+}
+
+.bi {
+  vertical-align: -0.125em;
+  pointer-events: none;
+  fill: currentColor;
+}
+
+.dropdown-toggle {
+  outline: 0;
+}
+

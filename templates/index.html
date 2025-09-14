@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container hero-container">
+      <div class="hero-text">
+        <h1>Your Fitness. Your Progress.</h1>
+        <p>Track clients, schedule sessions, and grow your training business with ease.</p>
+        <div class="hero-buttons">
+          <a href="/register" class="btn-primary">Get Started</a>
+          <a href="#learn" class="btn-secondary">Learn More</a>
+        </div>
+      </div>
+      <div class="hero-img">
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features container">
+    <h2 class="section-title">Why Choose Us?</h2>
+    <div class="feature-cards">
+      <div class="card">
+        <img src="{{ url_for('static', filename='img/icon1.png') }}" alt="">
+        <h3>Client Tracking</h3>
+        <p>Easily manage your clients’ progress and goals.</p>
+      </div>
+      <div class="card">
+        <img src="{{ url_for('static', filename='img/icon2.png') }}" alt="">
+        <h3>Scheduling</h3>
+        <p>Organize sessions and keep your calendar in sync.</p>
+      </div>
+      <div class="card">
+        <img src="{{ url_for('static', filename='img/icon3.png') }}" alt="">
+        <h3>Reports</h3>
+        <p>Visualize growth with performance and progress reports.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alternating Sections -->
+  <section class="alt-section dark">
+    <div class="container alt-container">
+      <div class="alt-text">
+        <h2>Stay Organized</h2>
+        <p>All your training data in one place, accessible anywhere.</p>
+      </div>
+      <div class="alt-img">
+        <img src="{{ url_for('static', filename='img/gym2.jpg') }}" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="alt-section">
+    <div class="container alt-container reverse">
+      <div class="alt-text">
+        <h2>Boost Client Success</h2>
+        <p>Help clients stay motivated with progress tracking and personalized plans.</p>
+      </div>
+      <div class="alt-img">
+        <img src="{{ url_for('static', filename='img/gym3.jpeg') }}" alt="">
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials container">
+    <h2 class="section-title">What Our Trainers Say</h2>
+    <div class="testimonial-cards">
+      <div class="t-card">
+        <p>“This app has transformed how I work with clients!”</p>
+        <h4>- Alex, Personal Trainer</h4>
+      </div>
+      <div class="t-card">
+        <p>“Finally, everything I need to manage my business in one place.”</p>
+        <h4>- Sarah, Gym Owner</h4>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-container">
+      <div class="footer-col">
+        <h4>TrainerApp</h4>
+        <p>Helping trainers and clients succeed together.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Links</h4>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Login</a></li>
+          <li><a href="#">Register</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>Email: support@trainerapp.com</p>
+      </div>
+    </div>
+  </footer>
+{% endblock %}
