@@ -141,6 +141,10 @@ def create_test_users():
     db.session.commit()
     return "Test users created!"
 
+@app.route("/calendar")
+def calendar():
+    return render_template("calendar.html")
+
 if __name__ == "__main__":
     server=Server(app.wsgi_app)
     server.serve(debug=True)

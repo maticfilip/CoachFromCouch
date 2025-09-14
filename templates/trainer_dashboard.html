@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
 <h2 class="mb-4">Trainer Dashboard</h2>
 
 <div class="row">
@@ -37,19 +38,6 @@
           </ul>
         </div>
       </li>
-      <!-- <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-          Orders
-        </button>
-        <div class="collapse" id="orders-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="#" class="link-dark rounded">New</a></li>
-            <li><a href="#" class="link-dark rounded">Processed</a></li>
-            <li><a href="#" class="link-dark rounded">Shipped</a></li>
-            <li><a href="#" class="link-dark rounded">Returned</a></li>
-          </ul>
-        </div>
-      </li> -->
       <li class="border-top my-3"></li>
       <li class="mb-1">
         <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
@@ -71,15 +59,7 @@
   <!-- Main content -->
   <div class="col-md-9">
     <!-- Today's Schedule -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Today's Schedule</h5>
-        <ul class="list-group">
-          <li class="list-group-item">09:00 - Session with Client A</li>
-          <li class="list-group-item">11:00 - Session with Client B</li>
-          <li class="list-group-item">14:00 - Team workout</li>
-        </ul>
-      </div>
+      {% include "calendar.html" %}
     </div>
 
     <!-- Manage Clients -->
