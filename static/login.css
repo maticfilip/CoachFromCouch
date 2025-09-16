@@ -55,6 +55,14 @@ input[type="checkbox"] {
 
 }
 
+.btn-register-wide{
+  width:100%;
+}
+
+.btn-login-wide{
+  width:100%;
+}
+
 .btn-register:hover,
 .btn-register-darker:hover {
   background-color: #0b1c39; /* slightly lighter brown on hover */

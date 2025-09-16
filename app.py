@@ -109,6 +109,30 @@ def dashboard():
         return redirect(url_for("client_dashboard"))
     else:
         return "Unknown role",403
+    
+@app.route("/edit_workout/<int:workout_id>",methods=["POST"])
+def edit_workout(workout_id):
+    if "user_id" not in session or session["role"]!="trainer":
+        return jsonify({"error": "Only trainers can edit workouts"}), 403
+    data=request.get_json()
+    workout=Workout.query.get_or_404(workout_id)
+    workout.title=data["title"]
+    workout.description = data.get("description", "")
+    workout.start = datetime.fromisoformat(data["start"])
+    workout.end = datetime.fromisoformat(data["end"])
+    workout.date = datetime.fromisoformat(data["date"]).date()
+    workout.client_id = int(data["client_id"]) if data.get("client_id") else None
+    db.session.commit()
+    return jsonify({"status": "success"})
+
+@app.route("/delete_workout/<int:workout_id>", methods=["POST"])
+def delete_workout(workout_id):
+    if "user_id" not in session or session["role"] != "trainer":
+        return jsonify({"error": "Only trainers can delete workouts"}), 403
+    workout = Workout.query.get_or_404(workout_id)
+    db.session.delete(workout)
+    db.session.commit()
+    return jsonify({"status": "success"})
 
 @app.route("/trainer")
 def trainer_dashboard():
@@ -157,7 +181,9 @@ def get_workouts():
             "id":w.id,
             "title":w.title,
             "start":w.start.isoformat(),
-            "end":w.end.isoformat()
+            "end":w.end.isoformat(),
+            "description":w.description,
+            "client_id":w.client_id
         }
         for w in workouts
     ]

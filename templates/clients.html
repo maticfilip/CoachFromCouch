@@ -1,145 +1,165 @@
 {% extends "base.html" %} {% block content %}
-<div class="container mt-4">
-  <h2>Clients</h2>
-  <table class="table table-striped mt-3">
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Birth Year</th>
-        <th>Email</th>
-        <th>Weight</th>
-        <th>Height</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% if clients %} {% for client in clients %}
-      <tr>
-        <td>{{ client.id }}</td>
-        <td>{{ client.name }}</td>
-        <td>{{ client.birthYear }}</td>
-        <td>{{ client.email }}</td>
-        <td>{{ client.weight }}</td>
-        <td>{{ client.height }}</td>
-      </tr>
-      {% endfor %} {% else %}
-      <tr>
-        <td colspan="6" class="text-center">No clients found</td>
-      </tr>
-      {% endif %}
-    </tbody>
-  </table>
-</div>
-
 <div class="container">
-  <!-- Button to trigger modal -->
-  <button
-    type="button"
-    class="btn btn-primary mt-3"
-    data-bs-toggle="modal"
-    data-bs-target="#addClientModal"
-  >
-    Add New Client
-  </button>
+  <div class="row">
+    {% include "trainer_sidebar.html" %}
+    <div class="col-md-9">
+      <h2>Clients</h2>
+      <table class="table table-striped mt-3">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Birth Year</th>
+            <th>Email</th>
+            <th>Weight</th>
+            <th>Height</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if clients %} {% for client in clients %}
+          <tr>
+            <td>{{ client.id }}</td>
+            <td>{{ client.name }}</td>
+            <td>{{ client.birthYear }}</td>
+            <td>{{ client.email }}</td>
+            <td>{{ client.weight }}</td>
+            <td>{{ client.height }}</td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="6" class="text-center">No clients found</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
 
-  <!-- ADD NEW -->
-  <div
-    class="modal fade"
-    id="addClientModal"
-    tabindex="-1"
-    aria-labelledby="addClientModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addClientModalLabel">Add New Client</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-9">
+        <button
+          type="button"
+          class="btn btn-login btn-login-wide"
+          data-bs-toggle="modal"
+          data-bs-target="#addClientModal"
+        >
+          Add New Client
+        </button>
+      </div>
+    </div>
+      <!-- ADD NEW -->
+      <div
+        class="modal fade"
+        id="addClientModal"
+        tabindex="-1"
+        aria-labelledby="addClientModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addClientModalLabel">
+                Add New Client
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form method="POST" action="/add_client">
+                <div class="mb-3">
+                  <label for="clientName" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="clientName"
+                    name="name"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="clientEmail" class="form-label">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="clientEmail"
+                    name="email"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="clientBirthYear" class="form-label"
+                    >Birth Year</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="clientBirthYear"
+                    name="birthYear"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="clientWeight" class="form-label"
+                    >Weight (kg)</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="clientWeight"
+                    name="weight"
+                    step="0.1"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="clientHeight" class="form-label"
+                    >Height (cm)</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="clientHeight"
+                    name="height"
+                    step="0.1"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="clientNotes" class="form-label">Notes</label>
+                  <textarea
+                    class="form-control"
+                    id="clientNotes"
+                    name="notes"
+                  ></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">
+                  Save Client
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">
-          <form method="POST" action="/add_client">
-            <div class="mb-3">
-              <label for="clientName" class="form-label">Name</label>
-              <input
-                type="text"
-                class="form-control"
-                id="clientName"
-                name="name"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="clientEmail" class="form-label">Email</label>
-              <input
-                type="email"
-                class="form-control"
-                id="clientEmail"
-                name="email"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="clientBirthYear" class="form-label">Birth Year</label>
-              <input
-                type="number"
-                class="form-control"
-                id="clientBirthYear"
-                name="birthYear"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="clientWeight" class="form-label">Weight (kg)</label>
-              <input
-                type="number"
-                class="form-control"
-                id="clientWeight"
-                name="weight"
-                step="0.1"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="clientHeight" class="form-label">Height (cm)</label>
-              <input
-                type="number"
-                class="form-control"
-                id="clientHeight"
-                name="height"
-                step="0.1"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="clientNotes" class="form-label">Notes</label>
-              <textarea
-                class="form-control"
-                id="clientNotes"
-                name="notes"
-              ></textarea>
-            </div>
-            <button type="submit" class="btn btn-success">Save Client</button>
-          </form>
+      </div>
+      <div class="container search-container">
+        <div class="row search-bar">
+          <div class="col-md-3">
+
+          </div>
+          <div class="col-md-9">
+            <input
+              type="text"
+              id="searchInput"
+              class="form-control mb-3"
+              placeholder="Search clients..."
+            />
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="container search-container">
-    <div class="row search-bar">
-      <div>
-        <input
-          type="text"
-          id="searchInput"
-          class="form-control mb-3"
-          placeholder="Search clients..."
-        />
-      </div>
-    </div>
-  </div>
-  {% endblock %}
 </div>
+{% endblock %}
 
 <script>
   document.getElementById("searchInput").addEventListener("keyup", function () {
