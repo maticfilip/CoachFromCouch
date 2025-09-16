@@ -1,8 +1,9 @@
-from flask import Flask, render_template,request,url_for,redirect,session,flash
+from flask import Flask, render_template,request,url_for,redirect,session,flash,jsonify 
 from livereload import Server
 from flask_sqlalchemy import SQLAlchemy
-from models import db,Client,User
+from models import db,Client,User,Workout
 from werkzeug.security import check_password_hash,generate_password_hash
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -43,6 +44,7 @@ def add_client():
     return redirect(url_for("clients"))
 
 
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -57,9 +59,9 @@ def login():
         user=User.query.filter_by(email=email).first()
 
         if user and check_password_hash(user.password,password):
-            #store session
             session["user_id"]=user.id
             session["role"]=user.role
+            session["username"]=user.username
             session.permanent=remember
 
             flash("Login successful!","success")
@@ -123,6 +125,8 @@ def client_dashboard():
 @app.route("/clients")
 def clients():
     all_clients=Client.query.all()  
+    if request.args.get("json")=="1":
+        return jsonify([{"id":c.id,"name":c.name} for c in all_clients])
     return render_template("clients.html", clients=all_clients)
 
 @app.route("/logout")
@@ -144,6 +148,41 @@ def create_test_users():
 @app.route("/calendar")
 def calendar():
     return render_template("calendar.html")
+
+@app.route("/get_workouts")
+def get_workouts():
+    workouts=Workout.query.all()
+    events=[
+        {
+            "id":w.id,
+            "title":w.title,
+            "start":w.start.isoformat(),
+            "end":w.end.isoformat()
+        }
+        for w in workouts
+    ]
+    return jsonify(events)
+
+@app.route("/add_workout",methods=["POST"])
+def add_workout():
+    if "user_id" not in session or session["role"]!="trainer":
+        return jsonify({"error":"Only trainers can add workouts"}), 403
+
+    data=request.get_json()
+    new_workout=Workout(
+        title=data["title"],
+        description=data.get("description", ""),
+        start=datetime.fromisoformat(data["start"]),
+        end=datetime.fromisoformat(data["end"]),
+        date=datetime.fromisoformat(data["date"]).date(),
+        trainer_id=session["user_id"],
+        client_id=int(data["client_id"]) if data.get("client_id") else None
+    )
+
+    db.session.add(new_workout)
+    db.session.commit()
+    return jsonify({"status":"success","id":new_workout.id})
+
 
 if __name__ == "__main__":
     server=Server(app.wsgi_app)

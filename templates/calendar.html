@@ -1,49 +1,181 @@
 {% block content %}
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Workout Calendar</h5>
-      <div id="calendar-container">
-        <div id="calendar">
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Workout Calendar</h5>
+    <div id="calendar-container">
+      <div id="calendar"></div>
+    </div>
+    <button class="btn btn-outline-primary mt-3" id="expand-calendar">
+      Enlarge
+    </button>
+  </div>
+</div>
 
+<div
+  class="modal fade"
+  id="addWorkoutModal"
+  tabindex="-1"
+  aria-labelledby="addWorkoutModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="addWorkoutForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addWorkoutModalLabel">Add Workout</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
-      </div>
-      <button class="btn btn-outline-primary mt-3" id="expand-calendar">Enlarge</button>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="workoutTitle" class="form-label">Workout Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="workoutTitle"
+              name="title"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="workoutDescription" class="form-label"
+              >Description</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="workoutDescription"
+              name="description"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="workoutClient" class="form-label"
+              >Assign to Client</label
+            >
+            <select
+              class="form-select"
+              id="workoutClient"
+              name="client_id"
+              required
+            >
+              <option value="">Select client</option>
+            </select>
+          </div>
+          <input type="hidden" id="workoutStart" name="start" />
+          <input type="hidden" id="workoutEnd" name="end" />
+          <input type="hidden" id="workoutDate" name="date" />
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">Add Workout</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
+  document.addEventListener("DOMContentLoaded", function () {
+    var calendarEl = document.getElementById("calendar");
     var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
+      initialView: "dayGridMonth",
       selectable: true,
       editable: true,
-      events: [
-        {
-          title: 'Leg Day',
-          start: '2025-08-29'
-        },
-        {
-          title: 'Push Workout',
-          start: '2025-08-31'
-        }
-      ],
-      dateClick: function(info) {
-        alert('Clicked on: ' + info.dateStr);
-        // later: open modal to add workout here
-      }
+      headerToolbar: {
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay",
+      },
+      dateClick: function (info) {
+        calendar.changeView("timeGridDay", info.dateStr);
+      },
+      select: function (info) {
+        // Show modal and fill hidden fields
+        document.getElementById("workoutStart").value = info.startStr;
+        document.getElementById("workoutEnd").value = info.endStr;
+        document.getElementById("workoutDate").value =
+          info.startStr.split("T")[0];
+        var addWorkoutModal = new bootstrap.Modal(
+          document.getElementById("addWorkoutModal")
+        );
+        addWorkoutModal.show();
+      },
+      events: "/get_workouts",
     });
+
     calendar.render();
 
-    const btn=document.getElementById("expand-calendar");
-    btn.addEventListener("click",()=>{
-        const container=document.getElementById("calendar-container");
-        container.classList.toggle("fullscreen-calendar");
-        calendar.updateSize();
-        btn.textContent=container.classList.contains("fullscreen-calendar")
-            ? "Shrink"
-            :"Enlarge"
+    // Populate client dropdown
+    document
+      .getElementById("addWorkoutModal")
+      .addEventListener("show.bs.modal", () => {
+        fetch("/clients?json=1")
+          .then((res) => res.json())
+          .then((clients) => {
+            const select = document.getElementById("workoutClient");
+            select.innerHTML = '<option value="">Select client</option>'; // reset
+            clients.forEach((client) => {
+              const opt = document.createElement("option");
+              opt.value = client.id;
+              opt.textContent = client.name;
+              select.appendChild(opt);
+            });
+          })
+          .catch((err) => console.error("Error loading clients:", err));
+      });
+
+    // Handle form submission
+    document
+      .getElementById("addWorkoutForm")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        const form = e.target;
+        fetch("/add_workout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: form.title.value,
+            description: form.description.value,
+            start: form.start.value,
+            end: form.end.value,
+            date: form.date.value,
+            client_id: form.client_id.value,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "success") {
+              calendar.refetchEvents();
+              bootstrap.Modal.getInstance(
+                document.getElementById("addWorkoutModal")
+              ).hide();
+            } else {
+              alert("Failed to add workout.");
+            }
+          });
+      });
+
+    // Enlarge / Shrink calendar
+    const btn = document.getElementById("expand-calendar");
+    btn.addEventListener("click", () => {
+      const container = document.getElementById("calendar-container");
+      container.classList.toggle("fullscreen-calendar");
+      calendar.updateSize();
+      btn.textContent = container.classList.contains("fullscreen-calendar")
+        ? "Shrink"
+        : "Enlarge";
     });
   });
 </script>
+
 {% endblock %}
