@@ -22,6 +22,11 @@ with app.app_context():
 
 @app.route("/add_client", methods=["POST"])
 def add_client():
+
+    if "user_id" not in session or session.get("role")!="trainer":
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for("login"))
+
     name=request.form["name"]
     email=request.form["email"]
     birthYear=request.form.get("birthYear")
@@ -35,12 +40,14 @@ def add_client():
         birthYear=birthYear,
         weight=weight,
         height=height,
-        notes=notes
+        notes=notes,
+        trainer_id=session["user_id"]
     )
 
     db.session.add(new_client)
     db.session.commit()
 
+    flash(f"{name} has been added as your client!", "success")
     return redirect(url_for("clients"))
 
 
@@ -142,9 +149,18 @@ def trainer_dashboard():
 
 @app.route("/client")
 def client_dashboard():
-    # dummy user for testing
-    user = {"username": "Client1"}
-    return render_template("client_dashboard.html", user=user)
+    if "user_id" not in session or session.get("role") != "client":
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for("login"))
+    
+    client=Client.query.filter_by(email=session.get("email")).first()
+
+    if not client:
+        flash("Client profile not found.","danger")
+        return redirect(url_for("logout"))
+    
+    trainer=client.trainer
+    return render_template("client_dashboard.html", client=client, trainer=trainer)
 
 @app.route("/clients")
 def clients():

@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Client Dashboard</h2>
-<p>Welcome, {{ user.username }}!</p>
-<div class="card mt-3">
+  <div class="card shadow-sm mb-4">
     <div class="card-body">
-        <h5 class="card-title">Your Workouts</h5>
-        <p class="card-text">Your trainer will assign workouts here.</p>
+      <h5 class="card-title">Welcome, {{ client.name }}</h5>
+
+      {% if trainer %}
+        <p><strong>Your Trainer:</strong> {{ trainer.username }} ({{ trainer.email }})</p>
+      {% else %}
+        <p><em>You don’t have a trainer assigned yet.</em></p>
+      {% endif %}
     </div>
-</div>
+  </div>
+
 {% endblock %}
